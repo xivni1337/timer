@@ -37,6 +37,14 @@ def timer():
     root.after(1000, timer)
 
 
+def ms_to_str_time(time):
+    time /= 1000
+    h = time // 3600
+    m=(time-h*3600)//60
+    s=(time-h*3600-m*60)%60
+    time_str = ('0' + str(int(h)))[-2::] + ':' + ('0'+str(int(m)))[-2::]+':'+('0'+str(int(m)))[-2::]
+    return time_str
+
 root = tk.Tk()
 root.title('Таймеры')
 root.geometry('800x600')
