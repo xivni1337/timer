@@ -25,7 +25,11 @@ def create_data_bases():
 
 
 def crete_timer_record():
-    pass
+    name = name_var.get()
+    sound_id = sounds.index(current_sound.get()) + 1
+    duration = current_time.get()
+    if not name:
+        return
 
 
 def add_sound():
@@ -44,6 +48,11 @@ def ms_to_str_time(time):
     s=(time-h*3600-m*60)%60
     time_str = ('0' + str(int(h)))[-2::] + ':' + ('0'+str(int(m)))[-2::]+':'+('0'+str(int(m)))[-2::]
     return time_str
+
+
+def time_back():
+    pass
+
 
 root = tk.Tk()
 root.title('Таймеры')
@@ -77,15 +86,17 @@ name_frame = tk.Frame(setting_frame)
 name_frame.pack(side=tk.TOP, fill=tk.X)
 name_label = tk.Label(master=name_frame, text='Имя', font=('Helvetica bold', 15))
 name_label.pack(side=tk.LEFT)
-name_entry = tk.Entry(master=name_frame)
+name_var = tk.StringVar()
+name_entry = tk.Entry(master=name_frame,textvariable=name_var)
 name_entry.pack(side=tk.RIGHT, fill=tk.X,expand=True)
 
 sounds =['Standard', 'super', 'puper']
+current_sound = tk.StringVar()
 sound_frame = tk.Frame(setting_frame)
 sound_frame.pack(fill=tk.X, side=tk.TOP)
 sound_label = tk.Label(master=sound_frame, text='Звук', font=('Helvetica bold', 15))
 sound_label.pack(side=tk.LEFT)
-sound_combobox = ttk.Combobox(master=sound_frame, values=sounds, state='readonly')
+sound_combobox = ttk.Combobox(master=sound_frame, values=sounds, textvariable=current_sound, state='readonly')
 sound_combobox.pack(side=tk.LEFT, fill=tk.X,expand=True)
 plus_img = tk.PhotoImage(file='static/icons/plus.png')
 add_sound_button = tk.Button(master=sound_frame, image=plus_img,command=add_sound)
@@ -95,7 +106,8 @@ slider_frame = tk.Frame(setting_frame)
 slider_frame.pack(side=tk.TOP, fill=tk.X)
 slider_label = tk.Label(master=slider_frame, text='Время', font=('Helvetica bold', 15))
 slider_label.pack(side=tk.LEFT)
-scale = tk.Scale(master=slider_frame, from_=5, to=180,orient='horizontal')
+current_time = tk.IntVar()
+scale = tk.Scale(master=slider_frame, variable=current_time, from_=5, to=180,orient='horizontal')
 scale.pack(fill=tk.X, side=tk.RIGHT, expand=True)
 
 create_button_frame = tk.Frame(setting_frame)
