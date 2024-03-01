@@ -30,6 +30,24 @@ def crete_timer_record():
     duration = current_time.get()
     if not name:
         return
+    conn = sqlite3.connect('timers.db')
+    c = conn.cursor()
+    c.execute(f'''  INSERT INTO timers (name, sound_id, duration)
+                    VALUES ("{name}", "{sound_id}","{duration}")''')
+    conn.commit()
+    conn.close()
+    update_listbox()
+
+
+def update_listbox():
+    conn = sqlite3.connect('timers.db')
+    c = conn.cursor()
+    c.execute('''SELECT id, name, duration FROM timers ''')
+    records = c.fetchall()
+    timers_listbox.delete(0, tk.END)
+    for record in records:
+        timers_listbox.insert(tk.END, record)
+    conn.close()
 
 
 def add_sound():
