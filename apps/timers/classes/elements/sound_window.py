@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import tkinter.filedialog
-
+import shutil
 
 class SoundWindow(tk.Toplevel):
 
@@ -41,7 +41,7 @@ class SoundWindow(tk.Toplevel):
 
         self.button_window_frame = tk.Frame(master=self)
         self.button_window_frame.pack()
-        self.add_button = tk.Button(master=self.button_window_frame, text='Добавить')
+        self.add_button = tk.Button(master=self.button_window_frame, text='неДобавить', command=self.create_sound)
         self.add_button.pack(side=tk.LEFT, padx=5)
         self.cancel_button = tk.Button(master=self.button_window_frame, text='Отмена')
         self.cancel_button.pack(side=tk.RIGHT, padx=5)
@@ -49,3 +49,10 @@ class SoundWindow(tk.Toplevel):
     def choice_sound(self):
         path = tkinter.filedialog.askopenfilename(title='Выбирете мелодию', filetypes=[('Аудио', '.мр3 mpeg .wav')])
         self.path.set(path)
+
+    def create_sound(self):
+        name = self.name.get()
+        path = self.path.get()
+        if not (name or path):
+            return
+        name_with_ext = name + '.' + path.split('.')[-1]
