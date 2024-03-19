@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import tkinter.filedialog
 import shutil
+import sqlite3
 
 class SoundWindow(tk.Toplevel):
 
@@ -16,6 +17,7 @@ class SoundWindow(tk.Toplevel):
         self.protocol(name='WM_DELETE_WINDOW', func=self.dismiss)
         self.resizable(False, False)
         self.fill_window()
+        self.DEFAULT_SOUND_PATH = 'static/sounds/'
 
     def dismiss(self):
         self.grab_release()
@@ -53,6 +55,17 @@ class SoundWindow(tk.Toplevel):
     def create_sound(self):
         name = self.name.get()
         path = self.path.get()
-        if not (name or path):
+        if not (name and path):
             return
         name_with_ext = name + '.' + path.split('.')[-1]
+        try:
+            shutil.copyfile(path,self.DEFAULT_SOUND_PATH + name_with_ext)
+        except Exception as e:
+            print(e)
+        conn = sqlite3.connect('timers.db')
+        c = conn.cursor()
+        c.execute(f'''INSERT INTO sounds (name, path) 
+                  values ('{name}','{path}')''')
+        conn.commit()
+        conn.close()
+        self.dismiss()

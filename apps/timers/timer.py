@@ -8,17 +8,17 @@ from classes.elements.sound_window import SoundWindow
 def create_data_bases():
     conn = sqlite3.connect('timers.db')
     c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS sounds (
+                                            id INTEGER PRIMARY KEY,
+                                            name TEXT,
+                                            path TEXT
+                                            )''')
     c.execute('''CREATE TABLE IF NOT EXISTS timers (
                                         id INTEGER PRIMARY KEY,
                                         name TEXT,
                                         sound_id INTEGER,
                                         duration INTEGER,
                                         FOREIGN KEY (sound_id) REFERENCES sounds(id) 
-                                        )''')
-    c.execute('''CREATE TABLE IF NOT EXISTS timers (
-                                        id INTEGER PRIMARY KEY,
-                                        name TEXT
-                                        path TEXT
                                         )''')
     conn.commit()
     conn.close()
