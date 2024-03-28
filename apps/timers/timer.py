@@ -24,7 +24,20 @@ def create_data_bases():
     conn.close()
 
 
-def crete_timer_record():
+def start_timer():
+    listbox_cursor = timers_listbox.curselection()
+    if listbox_cursor == ():
+        return
+    timer_id = timers_listbox.get(listbox_cursor[0])[0]
+    print(timer_id)
+    conn = sqlite3.connect('timers.db')
+    c = conn.cursor()
+    c.execute(f'SELECT duration, sound_id FROM timers WHERE id="{timer_id}"')
+    rows = c.fetchall()
+    duration = rows[0][0]
+    sound_id = rows[0][1]
+
+def create_timer_record():
     name = name_var.get()
     sound_id = sounds.index(current_sound.get()) + 1
     duration = current_time.get()
@@ -88,7 +101,7 @@ timers_listbox.pack(expand=True, side=tk.TOP, fill=tk.BOTH)
 info_button_frame = tk.Frame(info_frame)
 info_button_frame.pack(expand=False, side=tk.TOP)
 
-btn_start = tk.Button(info_button_frame, text='Начать')
+btn_start = tk.Button(info_button_frame, text='Начать',command=start_timer)
 btn_start.pack(side=tk.LEFT)
 
 btn_delete = tk.Button(info_button_frame,text='Удалить')
@@ -130,11 +143,12 @@ scale.pack(fill=tk.X, side=tk.RIGHT, expand=True)
 
 create_button_frame = tk.Frame(setting_frame)
 create_button_frame.pack(side=tk.TOP)
-create_button = tk.Button(master=create_button_frame,text='Создать', command=crete_timer_record)
+create_button = tk.Button(master=create_button_frame,text='Создать', command=create_timer_record)
 create_button.pack(side=tk.LEFT)
 edit_button = tk.Button(master=create_button_frame,text='Изменять')
 edit_button.pack(side=tk.RIGHT)
 
 create_data_bases()
 timer()
+update_listbox()
 root.mainloop()
